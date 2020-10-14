@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-send-email
+
+  Sample SAM Template for sam-send-email
+
+
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: sam-send-email
+    Description: aws sam app to send templated emails via SES
+    Author: Avatar New York
+    ReadmeUrl: README.md
+    Labels: ['ses','email']
+    SemanticVersion: 0.0.5
+    SourceCodeUrl: https://github.com/avatarnewyork/sam-send-email
+    
+Globals:
+  Function:
+    Timeout: 120
+
+    
+Resources:
+  SendEmailFunction:
+    Type: AWS::Serverless::Function 
+    Properties:
+      CodeUri: functions/send_email
+      Handler: app.lambda_handler
+      Runtime: python3.7
+      Policies:
+        - Statement:
+            - Sid: S3EmailSesPolicy
+              Effect: Allow
+              Action:
+                - ses:SendEmail
+                - ses:SendRawEmail
+                - ses:SendTemplatedEmail
+              Resource: "*"
+
+Outputs:
+  SendEmailFunction:
+    Description: "Send Email Function ARN"
+    Value: !GetAtt SendEmailFunction.Arn
+  SendEmailFunctionIamRole:
+    Description: "Implicit IAM Role created for SendEmailFunction function"
+    Value: !GetAtt SendEmailFunctionRole.Arn

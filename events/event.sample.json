@@ -1,0 +1,7 @@
+{
+    "email_from": "admins@ses.somedomain.com",
+    "email_to": "me@me.com",
+    "email_template": "template_email_success",
+    "email_config": "default",
+    "template_data": ""
+}
