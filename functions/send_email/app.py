@@ -26,21 +26,23 @@ def lambda_handler(event, context):
         
     #logger.info("test")
 
+    kwargs = dict(
+        Source=email_from,
+        Destination={
+            'ToAddresses': email_to
+        },
+        ReplyToAddresses=[
+            email_from
+        ],
+        Template=template,        
+        TemplateData=template_data,
+        ConfigurationSetName=config_set,
+        Tags=tags
+    )
+    
     try: 
         client = boto3.client('ses')
-        response = client.send_templated_email(
-            Source=email_from,
-            Destination={
-                'ToAddresses': email_to
-            },
-            ReplyToAddresses=[
-                email_from
-            ],
-            Template=template,        
-            TemplateData=template_data,
-            ConfigurationSetName=config_set,
-            Tags=tags
-        )
+        response = client.send_templated_email(**{k: v for k, v in kwargs.items() if v is not None})
         statusCode = response['ResponseMetadata']['HTTPStatusCode']
 
     except Exception as e:
