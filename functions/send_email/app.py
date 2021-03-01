@@ -16,8 +16,14 @@ def lambda_handler(event, context):
     email_to = event['email_to'].split(',')
     email_from = event['email_from']
     config = event['email_config']
-    template_data = event['template_data']
-
+    template_data = event.get('template_data', '{}')
+    config_set = event.get('config_set', None)
+    tags = event.get('tags', None)
+    
+    # backwords compadibility with older versions
+    if(template_data == 'default'):
+        template_data = '{}'
+        
     #logger.info("test")
 
     try: 
@@ -30,9 +36,10 @@ def lambda_handler(event, context):
             ReplyToAddresses=[
                 email_from
             ],
-            #ConfigurationSetName=config,
             Template=template,        
-            TemplateData="{}"
+            TemplateData=template_data,
+            ConfigurationSetName=config_set,
+            Tags=tags
         )
         statusCode = response['ResponseMetadata']['HTTPStatusCode']
 
