@@ -15,7 +15,6 @@ def lambda_handler(event, context):
     template = event['email_template']
     email_to = event['email_to'].split(',')
     email_from = event['email_from']
-    config = event['email_config']
     template_data = event.get('template_data', '{}')
     config_set = event.get('config_set', None)
     tags = event.get('tags', None)
